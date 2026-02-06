@@ -1,0 +1,354 @@
+/* ============ Reset & Base ============ */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+:root {
+  --bg: #1a1a2e;
+  --surface: #16213e;
+  --card-bg: #0f3460;
+  --accent: #e94560;
+  --text: #eee;
+  --text-muted: #aaa;
+  --radius: 16px;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  overflow-x: hidden;
+  min-height: 100dvh;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+#root {
+  min-height: 100dvh;
+}
+
+/* ============ App layout ============ */
+.app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+  padding: 16px;
+  padding-top: env(safe-area-inset-top, 16px);
+  padding-bottom: env(safe-area-inset-bottom, 16px);
+}
+
+.header {
+  text-align: center;
+  padding: 8px 0 16px;
+}
+
+.header h1 {
+  font-size: 1.4rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+/* ============ Card grid ============ */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 16px;
+  flex: 1;
+}
+
+/* Tablet / landscape */
+@media (min-width: 600px) {
+  .card-grid {
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 20px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .card-grid {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 24px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+}
+
+/* ============ Sound card ============ */
+.sound-card {
+  position: relative;
+  aspect-ratio: 1;
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.12s, box-shadow 0.12s;
+  display: flex;
+  flex-direction: column;
+}
+
+.sound-card:active {
+  transform: scale(0.95);
+}
+
+.sound-card.playing {
+  box-shadow: 0 0 0 3px var(--accent), 0 0 20px rgba(233, 69, 96, 0.4);
+}
+
+.card-image {
+  width: 100%;
+  flex: 1;
+  object-fit: cover;
+}
+
+.card-placeholder {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #0f3460, #1a1a2e);
+}
+
+.card-placeholder-icon {
+  font-size: 3rem;
+  opacity: 0.4;
+}
+
+.card-name {
+  padding: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-align: center;
+  background: rgba(0, 0, 0, 0.4);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Playing pulse */
+.playing-indicator {
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius);
+  border: 3px solid var(--accent);
+  animation: pulse 0.6s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+
+@keyframes pulse {
+  from { opacity: 0.4; }
+  to { opacity: 1; }
+}
+
+/* Pitch indicator */
+.pitch-indicator {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  background: rgba(0, 0, 0, 0.7);
+  padding: 4px 8px;
+  border-radius: 8px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+/* Card hover controls */
+.card-controls {
+  position: absolute;
+  bottom: 36px;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  padding: 8px;
+  background: rgba(0, 0, 0, 0.7);
+}
+
+.btn-edit,
+.btn-delete {
+  padding: 6px 16px;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-edit {
+  background: #3282b8;
+  color: white;
+}
+
+.btn-delete {
+  background: var(--accent);
+  color: white;
+}
+
+/* ============ Add card button ============ */
+.add-card {
+  aspect-ratio: 1;
+  background: var(--surface);
+  border: 2px dashed #444;
+  border-radius: var(--radius);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color 0.2s, background 0.2s;
+  color: var(--text);
+}
+
+.add-card:hover,
+.add-card:focus {
+  border-color: var(--accent);
+  background: rgba(233, 69, 96, 0.1);
+}
+
+.add-icon {
+  font-size: 2.5rem;
+  font-weight: 300;
+  opacity: 0.6;
+}
+
+/* ============ Empty hint ============ */
+.empty-hint {
+  text-align: center;
+  color: var(--text-muted);
+  margin-top: 24px;
+  font-size: 0.95rem;
+}
+
+/* ============ Modal ============ */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  padding: 16px;
+}
+
+.modal {
+  background: var(--surface);
+  border-radius: var(--radius);
+  padding: 24px;
+  width: 100%;
+  max-width: 420px;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.modal h2 {
+  margin-bottom: 16px;
+  font-size: 1.2rem;
+}
+
+.modal-label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  margin-bottom: 12px;
+}
+
+.modal-input {
+  display: block;
+  width: 100%;
+  margin-top: 6px;
+  padding: 10px 12px;
+  border: 1px solid #333;
+  border-radius: 10px;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 1rem;
+  outline: none;
+}
+
+.modal-input:focus {
+  border-color: var(--accent);
+}
+
+.modal-section {
+  margin-bottom: 16px;
+}
+
+.modal-buttons {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.btn {
+  padding: 10px 16px;
+  border: none;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  background: var(--card-bg);
+  color: var(--text);
+  transition: background 0.15s;
+}
+
+.btn:hover {
+  background: #145088;
+}
+
+.btn-record {
+  margin-top: 8px;
+  width: 100%;
+}
+
+.btn-record.recording {
+  background: var(--accent);
+  animation: blink 0.8s ease-in-out infinite alternate;
+}
+
+@keyframes blink {
+  from { opacity: 0.7; }
+  to { opacity: 1; }
+}
+
+.audio-ready {
+  display: inline-block;
+  margin-top: 8px;
+  font-size: 0.8rem;
+  color: #4caf50;
+  font-weight: 600;
+}
+
+.image-preview {
+  margin-top: 12px;
+  width: 100%;
+  max-height: 200px;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.btn-cancel {
+  flex: 1;
+  background: #333;
+}
+
+.btn-save {
+  flex: 1;
+  background: var(--accent);
+  color: white;
+}
+
+.btn-save:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
