@@ -52,10 +52,9 @@ export function AddEditModal({ card, onSave, onClose }: Props) {
   }, [isRecording, startRecording, stopRecording])
 
   const handleSave = useCallback(() => {
-    if (!name.trim()) return
     const newCard: SoundCard = {
       id: card?.id ?? uuidv4(),
-      name: name.trim(),
+      name: name.trim() || 'Untitled',
       imageBlob,
       audioBlob,
       createdAt: card?.createdAt ?? Date.now(),
@@ -69,7 +68,7 @@ export function AddEditModal({ card, onSave, onClose }: Props) {
         <h2>{isEditing ? 'Edit Card' : 'New Sound Card'}</h2>
 
         <label className="modal-label">
-          Name
+          Name (optional)
           <input
             type="text"
             className="modal-input"
@@ -136,7 +135,7 @@ export function AddEditModal({ card, onSave, onClose }: Props) {
           <button
             className="btn btn-save"
             onClick={handleSave}
-            disabled={!name.trim()}
+            disabled={false}
           >
             {isEditing ? 'Save' : 'Add'}
           </button>

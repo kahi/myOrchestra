@@ -60,19 +60,10 @@ describe('App', () => {
     expect(screen.queryByText('New Sound Card')).not.toBeInTheDocument()
   })
 
-  it('add button is disabled when name is empty', async () => {
+  it('add button is always enabled (name is optional)', async () => {
     const user = userEvent.setup()
     render(<App />)
     await user.click(screen.getByLabelText('Add new sound card'))
-    expect(screen.getByText('Add')).toBeDisabled()
-  })
-
-  it('add button is enabled when name is filled', async () => {
-    const user = userEvent.setup()
-    render(<App />)
-    await user.click(screen.getByLabelText('Add new sound card'))
-
-    await user.type(screen.getByPlaceholderText('e.g. Veverka'), 'Test Sound')
     expect(screen.getByText('Add')).toBeEnabled()
   })
 })
