@@ -10,6 +10,20 @@ interface Props {
   onDelete: (id: string) => void
 }
 
+const CARD_ANIMALS = [
+  '\u{1F43B}', '\u{1F431}', '\u{1F436}', '\u{1F42F}',
+  '\u{1F981}', '\u{1F438}', '\u{1F427}', '\u{1F422}',
+  '\u{1F40D}', '\u{1F989}', '\u{1F41D}', '\u{1F98B}',
+]
+
+function animalForId(id: string) {
+  let hash = 0
+  for (let i = 0; i < id.length; i++) {
+    hash = (hash * 31 + id.charCodeAt(i)) | 0
+  }
+  return CARD_ANIMALS[Math.abs(hash) % CARD_ANIMALS.length]
+}
+
 export function SoundCardTile({
   card,
   isPlaying,
@@ -19,7 +33,6 @@ export function SoundCardTile({
 }: Props) {
   const tileRef = useRef<HTMLDivElement>(null)
   const [pitchScale, setPitchScale] = useState(1)
-  const [showControls, setShowControls] = useState(false)
 
   const imageUrl = useMemo(
     () => (card.imageBlob ? URL.createObjectURL(card.imageBlob) : null),
@@ -49,30 +62,11 @@ export function SoundCardTile({
     }
   }, [card.audioBlob, card.id, onTap])
 
-  const handleLongPress = useCallback(() => {
-    setShowControls((v) => !v)
-  }, [])
-
-  const longPressTimer = useRef<ReturnType<typeof setTimeout>>(null)
-
-  const onPointerDown = useCallback(() => {
-    longPressTimer.current = setTimeout(handleLongPress, 500)
-  }, [handleLongPress])
-
-  const onPointerUp = useCallback(() => {
-    if (longPressTimer.current) {
-      clearTimeout(longPressTimer.current)
-    }
-  }, [])
-
   return (
     <div
       ref={tileRef}
       className={`sound-card ${isPlaying ? 'playing' : ''}`}
       onClick={handleTap}
-      onPointerDown={onPointerDown}
-      onPointerUp={onPointerUp}
-      onPointerLeave={onPointerUp}
       role="button"
       tabIndex={0}
       aria-label={`Play ${card.name}`}
@@ -80,43 +74,42 @@ export function SoundCardTile({
         if (e.key === 'Enter' || e.key === ' ') handleTap()
       }}
     >
+      {/* Always-visible edit & delete mini buttons */}
+      <button
+        className="card-btn-edit"
+        aria-label={`Edit ${card.name}`}
+        onClick={(e) => {
+          e.stopPropagation()
+          onEdit(card)
+        }}
+      >
+        &#9998;
+      </button>
+      <button
+        className="card-btn-delete"
+        aria-label={`Delete ${card.name}`}
+        onClick={(e) => {
+          e.stopPropagation()
+          onDelete(card.id)
+        }}
+      >
+        &#10005;
+      </button>
+
       {imageUrl ? (
         <img src={imageUrl} alt={card.name} className="card-image" />
       ) : (
         <div className="card-placeholder">
-          <span className="card-placeholder-icon">&#9835;</span>
+          <span className="card-placeholder-icon">{animalForId(card.id)}</span>
         </div>
       )}
       <div className="card-name">{card.name}</div>
 
       {pitchScale !== 1 && (
-        <div className="pitch-indicator">{pitchScale.toFixed(2)}x</div>
+        <div className="pitch-indicator">{pitchScale.toFixed(1)}x</div>
       )}
 
       {isPlaying && <div className="playing-indicator" />}
-
-      {showControls && (
-        <div className="card-controls" onClick={(e) => e.stopPropagation()}>
-          <button
-            className="btn-edit"
-            onClick={() => {
-              setShowControls(false)
-              onEdit(card)
-            }}
-          >
-            Edit
-          </button>
-          <button
-            className="btn-delete"
-            onClick={() => {
-              setShowControls(false)
-              onDelete(card.id)
-            }}
-          >
-            Delete
-          </button>
-        </div>
-      )}
     </div>
   )
 }

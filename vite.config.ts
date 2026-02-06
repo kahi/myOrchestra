@@ -13,8 +13,8 @@ export default defineConfig({
         name: 'My Orchestra',
         short_name: 'Orchestra',
         description: 'Create your own sound board with photos and recordings',
-        theme_color: '#1a1a2e',
-        background_color: '#1a1a2e',
+        theme_color: '#fef6e4',
+        background_color: '#fef6e4',
         display: 'standalone',
         orientation: 'any',
         icons: [

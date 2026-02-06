@@ -72,7 +72,7 @@ describe('SoundCardTile', () => {
     expect(container.querySelector('.playing-indicator')).toBeInTheDocument()
   })
 
-  it('has correct aria label', () => {
+  it('has edit and delete buttons', () => {
     render(
       <SoundCardTile
         card={makeCard({ name: 'Flamingo' })}
@@ -82,6 +82,40 @@ describe('SoundCardTile', () => {
         onDelete={vi.fn()}
       />,
     )
-    expect(screen.getByLabelText('Play Flamingo')).toBeInTheDocument()
+    expect(screen.getByLabelText('Edit Flamingo')).toBeInTheDocument()
+    expect(screen.getByLabelText('Delete Flamingo')).toBeInTheDocument()
+  })
+
+  it('calls onEdit when edit button clicked', async () => {
+    const onEdit = vi.fn()
+    const user = userEvent.setup()
+    const card = makeCard()
+    render(
+      <SoundCardTile
+        card={card}
+        isPlaying={false}
+        onTap={vi.fn()}
+        onEdit={onEdit}
+        onDelete={vi.fn()}
+      />,
+    )
+    await user.click(screen.getByLabelText('Edit Veverka'))
+    expect(onEdit).toHaveBeenCalledWith(card)
+  })
+
+  it('calls onDelete when delete button clicked', async () => {
+    const onDelete = vi.fn()
+    const user = userEvent.setup()
+    render(
+      <SoundCardTile
+        card={makeCard()}
+        isPlaying={false}
+        onTap={vi.fn()}
+        onEdit={vi.fn()}
+        onDelete={onDelete}
+      />,
+    )
+    await user.click(screen.getByLabelText('Delete Veverka'))
+    expect(onDelete).toHaveBeenCalledWith('test-1')
   })
 })
