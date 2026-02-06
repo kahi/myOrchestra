@@ -65,34 +65,34 @@ export function AddEditModal({ card, onSave, onClose }: Props) {
   return (
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal" onClick={(e) => e.stopPropagation()}>
-        <h2>{isEditing ? 'Edit Card' : 'New Sound Card'}</h2>
+        <h2>{isEditing ? '\u{270F}\u{FE0F} Edit' : '\u{2728} New Sound!'}</h2>
 
         <label className="modal-label">
-          Name (optional)
+          Name
           <input
             type="text"
             className="modal-input"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            placeholder="e.g. Veverka"
+            placeholder="Give it a name..."
             autoFocus
           />
         </label>
 
         <div className="modal-section">
-          <span className="modal-label">Photo</span>
+          <span className="modal-label">{'\u{1F4F7}'} Picture</span>
           <div className="modal-buttons">
             <button
               className="btn"
               onClick={() => fileInputRef.current?.click()}
             >
-              Choose File
+              {'\u{1F5BC}\u{FE0F}'} Pick
             </button>
             <button
               className="btn"
               onClick={() => cameraInputRef.current?.click()}
             >
-              Take Photo
+              {'\u{1F4F8}'} Camera
             </button>
           </div>
           <input
@@ -116,15 +116,15 @@ export function AddEditModal({ card, onSave, onClose }: Props) {
         </div>
 
         <div className="modal-section">
-          <span className="modal-label">Sound</span>
+          <span className="modal-label">{'\u{1F3A4}'} Sound</span>
           <button
             className={`btn btn-record ${isRecording ? 'recording' : ''}`}
             onClick={handleRecord}
           >
-            {isRecording ? 'Stop Recording' : audioBlob ? 'Re-record' : 'Record Sound'}
+            {isRecording ? '\u{23F9}\u{FE0F} Stop' : audioBlob ? '\u{1F504} Record again' : '\u{26AB} Record'}
           </button>
           {audioBlob && !isRecording && (
-            <span className="audio-ready">Audio ready</span>
+            <span className="audio-ready">{'\u{2705}'} Recorded!</span>
           )}
         </div>
 

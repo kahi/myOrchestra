@@ -62,7 +62,7 @@ function App() {
   return (
     <div className="app">
       <header className="header">
-        <h1>My Orchestra</h1>
+        <h1>{'\u{1F3B5}'} My Orchestra {'\u{1F3B6}'}</h1>
       </header>
 
       <main className="card-grid">
@@ -88,7 +88,7 @@ function App() {
 
       {cards.length === 0 && (
         <p className="empty-hint">
-          Tap <strong>+</strong> to add your first sound card
+          Tap the big <strong>+</strong> to make your first sound!
         </p>
       )}
 

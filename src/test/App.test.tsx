@@ -17,7 +17,7 @@ describe('App', () => {
 
   it('renders the header', async () => {
     render(<App />)
-    expect(screen.getByText('My Orchestra')).toBeInTheDocument()
+    expect(screen.getByText(/My Orchestra/)).toBeInTheDocument()
   })
 
   it('shows the add button', async () => {
@@ -28,7 +28,7 @@ describe('App', () => {
   it('shows empty hint when no cards', async () => {
     render(<App />)
     expect(
-      await screen.findByText(/to add your first sound card/i),
+      await screen.findByText(/to make your first sound/i),
     ).toBeInTheDocument()
   })
 
@@ -36,7 +36,7 @@ describe('App', () => {
     const user = userEvent.setup()
     render(<App />)
     await user.click(screen.getByLabelText('Add new sound card'))
-    expect(screen.getByText('New Sound Card')).toBeInTheDocument()
+    expect(screen.getByText(/New Sound/)).toBeInTheDocument()
   })
 
   it('modal has name input, photo buttons, and record button', async () => {
@@ -44,20 +44,20 @@ describe('App', () => {
     render(<App />)
     await user.click(screen.getByLabelText('Add new sound card'))
 
-    expect(screen.getByPlaceholderText('e.g. Veverka')).toBeInTheDocument()
-    expect(screen.getByText('Choose File')).toBeInTheDocument()
-    expect(screen.getByText('Take Photo')).toBeInTheDocument()
-    expect(screen.getByText('Record Sound')).toBeInTheDocument()
+    expect(screen.getByPlaceholderText(/give it a name/i)).toBeInTheDocument()
+    expect(screen.getByText(/Pick/)).toBeInTheDocument()
+    expect(screen.getByText(/Camera/)).toBeInTheDocument()
+    expect(screen.getByText(/Record/)).toBeInTheDocument()
   })
 
   it('closes modal on cancel', async () => {
     const user = userEvent.setup()
     render(<App />)
     await user.click(screen.getByLabelText('Add new sound card'))
-    expect(screen.getByText('New Sound Card')).toBeInTheDocument()
+    expect(screen.getByText(/New Sound/)).toBeInTheDocument()
 
     await user.click(screen.getByText('Cancel'))
-    expect(screen.queryByText('New Sound Card')).not.toBeInTheDocument()
+    expect(screen.queryByText(/New Sound/)).not.toBeInTheDocument()
   })
 
   it('add button is always enabled (name is optional)', async () => {
